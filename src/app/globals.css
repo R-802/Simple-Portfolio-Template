@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .border-custom {
+    border-color: var(--border);
+  }
+
+  .bg-background {
+    background-color: var(--background);
+  }
+
+  .text-foreground {
+    color: var(--foreground);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  * {
+    @apply border-gray-200;
+  }
+}
+
+/* Ensure transitions are applied globally */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.toolbar-button {
+  padding: 0 0.5rem;
+  color: #cfd8dc;
+}
+
+.toolbar-button:hover {
+  background-color: #e0e0e0;
+  /* Light mode hover background */
+  color: #000000;
+  /* Light mode hover text/icon color */
+}
+
+.dark .toolbar-button:hover {
+  background-color: #374151;
+  /* Dark mode hover background (Gray 700) */
+  color: #ffffff;
+  /* Dark mode hover text/icon color */
+}
+
+.separator {
+  width: 1px;
+  height: 20px;
+  background-color: #cfd8dc;
+  margin: 0 0.5rem;
+}
+
+.comment {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.thread-line {
+  position: absolute;
+  top: 0;
+  left: -12px;
+  /* Adjusts the position of the line */
+  width: 2px;
+  background-color: #ccc;
+  /* Color of the line */
+  height: 100%;
+  z-index: -1;
+  /* Ensures the line is behind the content */
+}
+
+.comment-content {
+  padding-left: 10px;
+  /* Adjust the content padding for alignment */
+}

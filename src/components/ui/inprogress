@@ -1,0 +1,121 @@
+{/*From the parent to the child*/ }
+{
+  hasReplies && (
+    <>
+      <div
+        className="absolute bg-gray-300 dark:bg-gray-600"
+        style={{
+          width: "2px", // Increased thickness
+          height: hasReplies ? "75%" : "68%", // Adjust height based on whether it has replies
+          bottom: hasReplies ? -20 : -14,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      />
+
+      <div
+        className="absolute border-l-2 border-b-2 dark:border-gray-600 border-gray-300"
+        style={{
+          width: "18px",
+          height: "18px",
+          bottom: "-37px",
+          left: "calc(50% - 1px)",
+          borderBottomLeftRadius: "20px",
+        }}
+      />
+
+      <div
+        className="absolute bg-gray-300 dark:bg-gray-600"
+        style={{
+          width: "35px",
+          height: "2px", // Increased thickness
+          bottom: "-37px", // Adjusted to align with the curved line
+          left: "50%",
+          transform: "translateX(17px)", // Adjusted for the new curved line size
+        }}
+      />
+    </>
+  )
+}
+{/* Between the children */ }
+{
+  !isLastComment && !isFirstComment && (
+    <>
+      {/* Vertical Line from the bottom of the parent avatar */}
+      {depth > 0 && (
+        <div
+          className="absolute bg-gray-300 dark:bg-gray-600"
+          style={{
+            width: "2px", // Increased thickness
+            height: hasReplies ? "75%" : "68%", // Adjust height based on whether it has replies
+            bottom: hasReplies ? -20 : -14, // Adjust positioning based on replies
+            left: "50%",
+            transform: "translateX(-50%)", // Center the line
+          }}
+        />
+      )}
+
+      {/* Curved Line to the nested avatar */}
+      {depth > 0 && hasReplies && (
+        <div
+          className="absolute border-l-2 border-b-2 dark:border-gray-600 border-gray-300"
+          style={{
+            width: "18px",
+            height: "18px",
+            bottom: "-37px",
+            left: "calc(50% - 1px)",
+            borderBottomLeftRadius: "20px", // Create the curve effect
+          }}
+        />
+      )}
+
+      {/* Horizontal Line to the avatar */}
+      {depth > 0 && hasReplies && (
+        <div
+          className="absolute bg-gray-300 dark:bg-gray-600"
+          style={{
+            width: "35px",
+            height: "2px",
+            bottom: "-37px",
+            left: "50%",
+            transform: "translateX(17px)",
+          }}
+        />
+      )}
+    </>
+  )
+}
+{/* Between siblings if no replies */ }
+{
+  isSibling && !isParent && !hasReplies && (
+    <>
+      <div
+        className="absolute bg-gray-300 dark:bg-gray-600"
+        style={{
+          width: "2px",
+          height: `68%`,
+          bottom: 90,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      />
+    </>
+  )
+}
+{/* Between siblings if replies */ }
+{
+  isSibling && hasReplies && (
+    <>
+      <div
+        className="absolute bg-gray-300 dark:bg-gray-600"
+        style={{
+          width: "2px",
+          height: `${verticalLineHeight}px`,
+          bottom: 90,
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      />
+    </>
+  )
+}
