@@ -1,3 +1,9 @@
+/**
+ * Renders a sidebar component with state management.
+ * Used in the page slug component.
+ *
+ * @returns The rendered sidebar component.
+ */
 "use client";
 
 import React, { useState } from "react";
@@ -16,7 +22,7 @@ export default function SidebarWithState() {
     <>
       {/* Mobile Header */}
       <header className="md:hidden bg-gray-100 dark:bg-gray-900 p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Post Title</h1>
+        <h1 className="text-xl font-bold">Title</h1>
         <Button variant="ghost" size="icon" onClick={toggleSidebar}>
           <MenuIcon className="h-6 w-6" />
         </Button>

@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class', // or 'media' or false for no dark mode support
+  darkMode: 'class',
   content: [
-    './src/**/*.{js,ts,jsx,tsx}', // Include all files in src directory
-    './pages/**/*.{js,ts,jsx,tsx}', // If using a pages directory
-    './components/**/*.{js,ts,jsx,tsx}', // If using a components directory
+    './src/**/*.{js,ts,jsx,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {},

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -481,11 +481,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
 const Comments: React.FC<CommentsProps> = ({ postSlug }) => {
   const [comments, setComments] = useState<Comment[]>([]);
 
-  useEffect(() => {
-    fetchComments();
-  }, [postSlug]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(`/api/comments?postSlug=${postSlug}`);
       if (!response.ok) throw new Error("Failed to fetch comments");
@@ -494,7 +490,11 @@ const Comments: React.FC<CommentsProps> = ({ postSlug }) => {
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
-  };
+  }, [postSlug]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
 
   const handleNewComment = async (content: string) => {
     try {
@@ -553,8 +553,10 @@ const Comments: React.FC<CommentsProps> = ({ postSlug }) => {
   return (
     <section className="mt-12">
       <Card className="w-full dark:bg-gray-800 dark:text-gray-100">
-        <CardHeader>
-          <CardTitle>Comments</CardTitle>
+        <CardHeader className="flex flex-col space-y-1.5 p-6">
+          <CardTitle className="text-3xl font-semibold leading-none tracking-tight py-0 px-0">
+            Comments
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <CommentForm onSubmit={handleNewComment} />

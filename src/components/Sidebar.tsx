@@ -25,12 +25,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div className="flex flex-col h-full relative">
       <div className="absolute top-0 left-0 right-0 h-48">
-        <Image
-          src="/images/sidebar-bg.jpg"
-          alt="Sidebar background"
-          layout="fill"
-          objectFit="cover"
-          priority
+        <div
+          className="absolute inset-0 bg-cover bg-center z-0"
+          style={{ backgroundImage: 'url("/images/sidebar-bg.jpg")' }}
+          aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-gray-100 dark:to-gray-800" />
       </div>
@@ -40,15 +38,16 @@ const Sidebar: React.FC<SidebarProps> = ({
           size="icon"
           className="absolute top-2 right-2 z-10"
           onClick={toggleSidebar}
+          aria-label="Close sidebar"
         >
           <XIcon className="h-6 w-6" />
         </Button>
       )}
-      <div className="relative px-6 pt-48 pb-6 flex flex-col flex-grow">
+      <div className="relative px-6 pt-48 pb-6 flex flex-col flex-grow overflow-y-auto">
         <div className="relative -mt-24 mb-8 text-center">
           <div className="relative w-32 h-32 mx-auto mb-4">
             <Image
-              src="/placeholder.svg?height=128&width=128"
+              src="/images/profile.jpg"
               alt="Profile picture"
               layout="fill"
               className="rounded-full border-4 border-white shadow-lg dark:border-gray-700"
@@ -57,15 +56,14 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <h1 className="text-xl font-bold mb-2">Title</h1>
           <p className="text-sm text-gray-600 italic dark:text-gray-400">
-            "Some text"
+            &quot;Some text&quot;
           </p>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="mb-auto">
+        <nav className="mb-auto" aria-label="Main navigation">
           <ul className="space-y-2">
             <li>
-              <Link href="/" passHref>
+              <Link href="/" passHref legacyBehavior>
                 <Button
                   variant="ghost"
                   className="w-full justify-start hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -75,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </Link>
             </li>
             <li>
-              <Link href="/categories" passHref>
+              <Link href="/categories" passHref legacyBehavior>
                 <Button
                   variant="ghost"
                   className="w-full justify-start hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -85,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </Link>
             </li>
             <li>
-              <Link href="/about" passHref>
+              <Link href="/about" passHref legacyBehavior>
                 <Button
                   variant="ghost"
                   className="w-full justify-start hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -99,9 +97,10 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <div className="flex justify-left space-x-2 items-center">
           <a
-            href="https://www.linkedin.com/in/shemaiah-rangitaawa-b24b18233/"
+            href="https://www.linkedin.com"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="LinkedIn profile"
           >
             <Button
               size="icon"
@@ -112,9 +111,10 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Button>
           </a>
           <a
-            href="https://github.com/R-802"
+            href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub profile"
           >
             <Button
               size="icon"
@@ -124,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               <GitHubLogoIcon className="h-4 w-4" />
             </Button>
           </a>
-          <a href="mailto:shemaiahr802@gmail.com">
+          <a href="mailto:joesmother69420@gmail.com" aria-label="Email contact">
             <Button
               size="icon"
               variant="ghost"
@@ -134,10 +134,11 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Button>
           </a>
 
-          {/* Separator Line */}
-          <div className="separator"></div>
+          <div
+            className="h-6 w-px bg-gray-300 dark:bg-gray-700"
+            aria-hidden="true"
+          />
 
-          {/* Theme Toggle Button */}
           <ThemeToggle />
         </div>
       </div>

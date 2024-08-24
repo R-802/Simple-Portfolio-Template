@@ -1,23 +1,33 @@
-import { NextResponse } from 'next/server'
-import { getPostMetadata } from '@/lib/posts'
+import { NextRequest, NextResponse } from 'next/server';
+import { getPostMetadata } from '@/lib/posts.server';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const page = Number(searchParams.get('page')) || 1
-  const limit = Number(searchParams.get('limit')) || 5
+const POSTS_PER_PAGE = 3;
 
-  const allPosts = getPostMetadata()
-  const totalPosts = allPosts.length
-  const totalPages = Math.ceil(totalPosts / limit)
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || String(POSTS_PER_PAGE), 10);
 
-  const start = (page - 1) * limit
-  const end = start + limit
-  const posts = allPosts.slice(start, end)
+    const allPosts = getPostMetadata();
+    const totalPosts = allPosts.length;
+    const totalPages = Math.ceil(totalPosts / limit);
 
-  return NextResponse.json({
-    posts,
-    currentPage: page,
-    totalPages,
-    totalPosts,
-  })
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedPosts = allPosts.slice(startIndex, endIndex);
+
+    return NextResponse.json({
+      posts: paginatedPosts,
+      currentPage: page,
+      totalPages: totalPages,
+      totalPosts: totalPosts,
+    });
+  } catch (error) {
+    console.error('Error in GET /api/posts:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error', details: (error as Error).message },
+      { status: 500 }
+    );
+  }
 }
