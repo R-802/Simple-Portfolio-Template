@@ -29,7 +29,7 @@ const ClientComments: React.FC<ClientCommentsProps> = ({ postSlug }) => {
     return () => unsubscribe();
   }, []);
 
-  return <Comments postSlug={postSlug} currentUser={currentUser} />;
+  return <Comments postSlug={postSlug} />;
 };
 
 export default ClientComments;

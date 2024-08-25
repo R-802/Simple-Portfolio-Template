@@ -41,6 +41,11 @@ const CommentForm: React.FC<CommentFormProps> = ({
           prefillContent.length
         );
       }
+    } else {
+      const storedContent = localStorage.getItem("pendingComment");
+      if (storedContent) {
+        setContent(storedContent);
+      }
     }
   }, [isReply, parentComment]);
 
@@ -88,7 +93,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
       onSubmit(content, displayName);
       setContent("");
       setIsPreviewMode(false);
+      localStorage.removeItem("pendingComment");
     } else {
+      localStorage.setItem("pendingComment", content);
       setIsSignInModalOpen(true);
     }
   };
@@ -99,8 +106,11 @@ const CommentForm: React.FC<CommentFormProps> = ({
   };
 
   const handleSignIn = (username: string, provider: string) => {
-    if (!content.trim()) return;
-    onSubmit(content, username);
+    const pendingComment = localStorage.getItem("pendingComment");
+    if (pendingComment) {
+      onSubmit(pendingComment, username);
+      localStorage.removeItem("pendingComment");
+    }
     setContent("");
     setIsPreviewMode(false);
     setIsSignInModalOpen(false);
