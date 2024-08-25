@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "types/**/*.d.ts"
-  ],
+, "src/app/api/comments/route.js"  ],
   "exclude": [
     "node_modules"
   ]

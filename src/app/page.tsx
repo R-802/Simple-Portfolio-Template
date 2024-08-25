@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -12,15 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PostMetadata } from "@/lib/posts.server";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import PaginationComponent from "@/components/Pagination";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -30,7 +22,7 @@ import rehypeStringify from "rehype-stringify";
 import rehypeRaw from "rehype-raw";
 import remarkEmoji from "remark-emoji";
 import { unified } from "unified";
-
+import SkeletonPost from "@/components/ui/skeleton";
 import SidebarWithState from "@/components/SidebarWithState";
 
 const POSTS_PER_PAGE = 3;
@@ -43,30 +35,9 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    const page = Number(searchParams?.get("page")) || 1;
-    setCurrentPage(page);
-    fetchPosts(page);
-  }, [searchParams]);
-
-  const convertMarkdownToHtml = async (markdown: string): Promise<string> => {
-    const result = await unified()
-      .use(remarkParse)
-      .use(remarkGfm)
-      .use(remarkMath)
-      .use(remarkEmoji)
-      .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeRaw)
-      .use(rehypeKatex)
-      .use(rehypeStringify)
-      .process(markdown);
-
-    return result.toString();
-  };
-
-  const fetchPosts = async (page: number) => {
+  // Fetch posts and handle pagination
+  const fetchPosts = useCallback(async (page: number) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -99,7 +70,28 @@ export default function Home() {
       setError("Failed to fetch posts. Please try again later.");
     }
     setIsLoading(false);
+  }, []);
+
+  const convertMarkdownToHtml = async (markdown: string): Promise<string> => {
+    const result = await unified()
+      .use(remarkParse)
+      .use(remarkGfm)
+      .use(remarkMath)
+      .use(remarkEmoji)
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeRaw)
+      .use(rehypeKatex)
+      .use(rehypeStringify)
+      .process(markdown);
+
+    return result.toString();
   };
+
+  useEffect(() => {
+    const page = Number(searchParams?.get("page")) || 1;
+    setCurrentPage(page);
+    fetchPosts(page); // Calls the updated fetchPosts function
+  }, [searchParams, fetchPosts]); // Added fetchPosts to the dependency array
 
   const handlePageChange = (page: number) => {
     router.push(`/?page=${page}`);
@@ -107,7 +99,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-background dark:bg-gray-900">
+      {/* Sidebar */}
       <SidebarWithState />
+
       {/* Main Content */}
       <main className="flex-grow p-6 md:p-8 overflow-auto dark:bg-gray-900 dark:text-gray-100 md:ml-64">
         <div className="max-w-8xl mx-auto p-5">
@@ -119,16 +113,19 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 mb-8">
-              This website can be used as a versatile template for showcasing
-              your work portfolio, personal projects, or creative endeavors.
-              Customize it to reflect your unique style and expertise.
+              This website can be used as a template for showcasing your
+              professional portfolio, or personal projects.
             </p>
           </section>
 
           {/* Posts */}
           <section className="mb-16">
             {isLoading ? (
-              <p>Loading...</p>
+              <div className="space-y-12">
+                {[...Array(POSTS_PER_PAGE)].map((_, index) => (
+                  <SkeletonPost key={index} />
+                ))}
+              </div>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
@@ -194,85 +191,11 @@ export default function Home() {
 
           {/* Pagination */}
           <div className="mt-auto">
-            <div className="flex justify-center mt-8">
-              <Pagination>
-                <PaginationContent>
-                  {currentPage > 1 && (
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href={`/?page=${currentPage - 1}`}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        Previous
-                      </PaginationPrevious>
-                    </PaginationItem>
-                  )}
-
-                  {currentPage > 2 && (
-                    <>
-                      <PaginationItem>
-                        <PaginationLink
-                          href={`/?page=1`}
-                          onClick={() => handlePageChange(1)}
-                          className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      {currentPage > 3 && <PaginationEllipsis />}
-                    </>
-                  )}
-
-                  {Array.from({ length: totalPages }, (_, index) => index + 1)
-                    .filter(
-                      (page) =>
-                        page === currentPage ||
-                        page === currentPage - 1 ||
-                        page === currentPage + 1
-                    )
-                    .map((page) => (
-                      <PaginationItem key={page}>
-                        <PaginationLink
-                          href={`/?page=${page}`}
-                          onClick={() => handlePageChange(page)}
-                          isActive={currentPage === page}
-                          className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                        >
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-
-                  {currentPage < totalPages - 1 && (
-                    <>
-                      {currentPage < totalPages - 2 && <PaginationEllipsis />}
-                      <PaginationItem>
-                        <PaginationLink
-                          href={`/?page=${totalPages}`}
-                          onClick={() => handlePageChange(totalPages)}
-                          className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                        >
-                          {totalPages}
-                        </PaginationLink>
-                      </PaginationItem>
-                    </>
-                  )}
-
-                  {currentPage < totalPages && (
-                    <PaginationItem>
-                      <PaginationNext
-                        href={`/?page=${currentPage + 1}`}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        className="hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                      >
-                        Next
-                      </PaginationNext>
-                    </PaginationItem>
-                  )}
-                </PaginationContent>
-              </Pagination>
-            </div>
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </main>

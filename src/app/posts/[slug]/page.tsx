@@ -1,3 +1,5 @@
+// app/posts/[slug]/page.tsx
+
 import { getPostMetadata, getPostBySlug } from "@/lib/posts.server";
 import React from "react";
 import { notFound } from "next/navigation";
@@ -13,7 +15,10 @@ import Link from "next/link";
 import SidebarWithState from "@/components/SidebarWithState";
 import dynamic from "next/dynamic";
 
-const Comments = dynamic(() => import("@/components/Comments"), { ssr: false });
+// Import the client-side wrapper, ensure this is correctly imported
+const ClientComments = dynamic(() => import("./ClientComments"), {
+  ssr: false,
+});
 
 interface PostPageProps {
   params: { slug: string };
@@ -77,7 +82,9 @@ export default async function PostPage({ params }: PostPageProps) {
               </CardFooter>
             </Card>
           </section>
-          <Comments postSlug={params.slug} />
+
+          {/* Use the client-side Comments wrapper */}
+          <ClientComments postSlug={params.slug} />
         </div>
       </main>
     </div>
