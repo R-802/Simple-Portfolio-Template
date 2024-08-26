@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -48,6 +48,19 @@ const CommentForm: React.FC<CommentFormProps> = ({
       }
     }
   }, [isReply, parentComment]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        handleCancel();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const insertMarkdown = (syntax: string, placeholder: string) => {
     if (textareaRef.current) {
@@ -119,28 +132,13 @@ const CommentForm: React.FC<CommentFormProps> = ({
     setIsPreviewMode(!isPreviewMode);
   };
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     setContent("");
     setIsPreviewMode(false);
     if (onCancel) {
       onCancel();
     }
-  }, [onCancel]); // Correct dependency array for useCallback
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        if (handleCancel) {
-          handleCancel();
-        }
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [handleCancel]);
+  };
 
   useEffect(() => {
     if (!isPreviewMode && textareaRef.current) {

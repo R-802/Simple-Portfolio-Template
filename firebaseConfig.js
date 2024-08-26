@@ -3,14 +3,15 @@ import { getFirestore } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 
+// Firebase configuration using environment variables
 const firebaseConfig = {
-    apiKey: "AIzaSyDW2o6-U_yfOchrCybxuca3XVPzNWpG0xY",
-    authDomain: "portfolio-template-demo.firebaseapp.com",
-    projectId: "portfolio-template-demo",
-    storageBucket: "portfolio-template-demo.appspot.com",
-    messagingSenderId: "341276079607",
-    appId: "1:341276079607:web:9dcf6bcd10278a43dfaaf2",
-    measurementId: "G-3S2QS1PW2C"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
@@ -32,4 +33,17 @@ if (typeof window !== 'undefined') {
     });
 }
 
-export { db, auth, analytics };
+async function getAuthToken() {
+    const currentUser = auth.currentUser; // Use the initialized auth instance
+    if (!currentUser) {
+        throw new Error("User not authenticated");
+    }
+    try {
+        return await currentUser.getIdToken();
+    } catch (error) {
+        console.error("Error getting auth token:", error);
+        throw new Error("Failed to get auth token");
+    }
+}
+
+export { db, auth, analytics, getAuthToken };

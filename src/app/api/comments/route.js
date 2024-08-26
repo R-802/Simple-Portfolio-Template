@@ -1,5 +1,6 @@
 import { db } from 'firebaseConfig';
 import { collection, addDoc, query, where, getDocs, doc, updateDoc, arrayUnion, getDoc, deleteDoc } from 'firebase/firestore';
+import { adminDb, adminAuth } from 'firebaseAdmin';
 
 export async function DELETE(req, { params }) {
     const { commentId } = params;
@@ -7,65 +8,80 @@ export async function DELETE(req, { params }) {
         return new Response(JSON.stringify({ error: 'Comment ID is required' }), { status: 400 });
     }
 
-    const user = req.user; // Get the authenticated user
-    if (!user) {
-        return new Response(JSON.stringify({ error: 'User not authenticated' }), { status: 401 });
+    const authHeader = req.headers.get('Authorization');
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+        return new Response(JSON.stringify({ error: 'Authorization token missing' }), { status: 401 });
     }
 
     try {
-        const commentRef = doc(db, 'comments', commentId);
-        const commentSnap = await getDoc(commentRef);
+        const decodedToken = await adminAuth.verifyIdToken(token);
+        const user = decodedToken; // Extract user details from token
 
-        if (!commentSnap.exists()) {
+        const commentRef = adminDb.collection('comments').doc(commentId);
+        const commentSnap = await commentRef.get();
+
+        if (!commentSnap.exists) {
             return new Response(JSON.stringify({ error: 'Comment not found' }), { status: 404 });
         }
 
         const comment = commentSnap.data();
-        if (comment.author !== user.uid) {
+        console.log('Comment UID:', comment.uid);
+        console.log('Requesting User UID:', user.uid);
+
+        if (comment.uid !== user.uid) {
+            console.error('Unauthorized delete attempt. User UID does not match comment UID.');
             return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 403 });
         }
 
-        await deleteDoc(commentRef);
+        await commentRef.delete();
         return new Response(JSON.stringify({ success: true }), { status: 200 });
     } catch (error) {
-        console.error('Error deleting comment:', error);
+        console.error('Error deleting comment:', {
+            message: error.message,
+            stack: error.stack,
+            code: error.code
+        });
         return new Response(JSON.stringify({ error: 'Failed to delete comment' }), { status: 500 });
     }
+
 }
 
+
+
 export async function POST(req) {
+    const authHeader = req.headers.get('Authorization');
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) {
+        return new Response(JSON.stringify({ error: 'Authorization token missing' }), { status: 401 });
+    }
+
     try {
+        const decodedToken = await adminAuth.verifyIdToken(token);
+        const user = decodedToken; // Extract user details from token
         const { postSlug, content, author, parentId } = await req.json();
 
         if (!postSlug || !content || !author) {
             return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 });
         }
 
+        // Ensure the user is authenticated (we trust the token)
+        // No need to check if `author === user.uid`, just authorize action
         const commentData = {
             postSlug,
             content,
-            author,  // Make sure this is correctly set on the client side
+            author,  // This is the display name, not the uid
+            parentId: parentId || null,
             createdAt: new Date().toISOString(),
-            upvotes: 0,
-            downvotes: 0,
-            parentId: parentId || null,  // Properly handle parent-child relationships
-            replies: [],
+            uid: user.uid,  // Store uid separately for authorization
         };
 
-        const docRef = await addDoc(collection(db, 'comments'), commentData);
+        await adminDb.collection('comments').add(commentData);
 
-        // If it's a reply, update the parent comment
-        if (parentId) {
-            const parentDocRef = doc(db, 'comments', parentId);
-            await updateDoc(parentDocRef, {
-                replies: arrayUnion(docRef.id),
-            });
-        }
-
-        return new Response(JSON.stringify({ id: docRef.id }), { status: 200 });
+        return new Response(JSON.stringify({ success: true }), { status: 200 });
     } catch (error) {
-        console.error('Error submitting comment:', error);
-        return new Response(JSON.stringify({ error: 'Failed to submit comment' }), { status: 500 });
+        console.error('Error verifying token:', error);
+        return new Response(JSON.stringify({ error: 'Failed to verify token' }), { status: 403 });
     }
 }
 
@@ -79,17 +95,17 @@ export async function GET(req) {
             return new Response(JSON.stringify({ error: 'Post slug is required' }), { status: 400 });
         }
 
-        const q = query(collection(db, 'comments'), where('postSlug', '==', postSlug));
-        const querySnapshot = await getDocs(q);
+        const q = adminDb.collection('comments').where('postSlug', '==', postSlug);
+        const querySnapshot = await q.get();
 
         const commentsMap = new Map();
         const topLevelComments = [];
 
         // First pass: create all comment objects
-        for (const docSnapshot of querySnapshot.docs) {
+        querySnapshot.forEach(docSnapshot => {
             const comment = { id: docSnapshot.id, ...docSnapshot.data(), replies: [] };
             commentsMap.set(comment.id, comment);
-        }
+        });
 
         // Second pass: structure comments hierarchically
         for (const comment of commentsMap.values()) {

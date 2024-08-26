@@ -22,6 +22,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "firebase": "^10.13.0",
+    "firebase-admin": "^12.4.0",
     "fs": "^0.0.1-security",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.428.0",

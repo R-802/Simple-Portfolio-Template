@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CommentForm from "@/components/CommentForm";
 import CommentItem from "@/components/CommentItem";
+import { getAuthToken } from "firebaseConfig";
 
 const MAX_INDENTATION_DEPTH = 1;
 
@@ -47,9 +48,13 @@ export default function Comments({ postSlug }: CommentsProps) {
 
   const handleNewComment = async (content: string, displayName: string) => {
     try {
+      const token = await getAuthToken(); // Retrieve the auth token
       const response = await fetch("/api/comments", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include the token in the header
+        },
         body: JSON.stringify({
           postSlug,
           content,
@@ -70,9 +75,13 @@ export default function Comments({ postSlug }: CommentsProps) {
     displayName: string
   ) => {
     try {
+      const token = await getAuthToken(); // Retrieve the token
       const response = await fetch("/api/comments", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Include token in header
+        },
         body: JSON.stringify({
           postSlug,
           content,
@@ -106,8 +115,13 @@ export default function Comments({ postSlug }: CommentsProps) {
 
   const handleDelete = async (commentId: string) => {
     try {
+      const token = await getAuthToken(); // Retrieve the auth token
       const response = await fetch(`/api/comments/${commentId}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the header
+          "Content-Type": "application/json",
+        },
       });
       if (!response.ok) throw new Error("Failed to delete comment");
       await fetchComments();
