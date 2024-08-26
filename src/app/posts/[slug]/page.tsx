@@ -14,8 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import SidebarWithState from "@/components/SidebarWithState";
 import dynamic from "next/dynamic";
-
-// Import the client-side wrapper, ensure this is correctly imported
 const ClientComments = dynamic(() => import("./ClientComments"), {
   ssr: false,
 });
@@ -24,18 +22,11 @@ interface PostPageProps {
   params: { slug: string };
 }
 
-export async function generateStaticParams() {
-  const posts = getPostMetadata();
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
 export default async function PostPage({ params }: PostPageProps) {
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
+    // This uses Next.js's notFound function to return a 404 if the post is not found
     notFound();
   }
 
@@ -89,4 +80,13 @@ export default async function PostPage({ params }: PostPageProps) {
       </main>
     </div>
   );
+}
+
+// Example of `generateStaticParams` function usage in App Router
+export async function generateStaticParams() {
+  const posts = getPostMetadata();
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
 }
