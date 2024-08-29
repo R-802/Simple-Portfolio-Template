@@ -1,4 +1,7 @@
 import admin from 'firebase-admin';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 if (!admin.apps.length) {
     admin.initializeApp({
@@ -14,6 +17,7 @@ if (!admin.apps.length) {
             auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
             client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
         }),
+        databaseURL: `https://${process.env.FIREBASE_PROJECT_ID}.firebaseio.com`,
     });
 }
 

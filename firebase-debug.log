@@ -1,0 +1,67 @@
+[debug] [2024-08-26T11:31:46.598Z] ----------------------------------------------------------------------
+[debug] [2024-08-26T11:31:46.600Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\shema\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2024-08-26T11:31:46.600Z] CLI Version:   13.14.2
+[debug] [2024-08-26T11:31:46.601Z] Platform:      win32
+[debug] [2024-08-26T11:31:46.601Z] Node Version:  v20.13.1
+[debug] [2024-08-26T11:31:46.601Z] Time:          Mon Aug 26 2024 23:31:46 GMT+1200 (GMT+12:00)
+[debug] [2024-08-26T11:31:46.601Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-08-26T11:31:46.684Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-08-26T11:31:46.684Z] > authorizing via signed-in user (shemaiahr802@gmail.com)
+[debug] [2024-08-26T11:31:46.747Z] java version "22.0.2" 2024-07-16
+
+[debug] [2024-08-26T11:31:46.748Z] Java(TM) SE Runtime Environment (build 22.0.2+9-70)
+Java HotSpot(TM) 64-Bit Server VM (build 22.0.2+9-70, mixed mode, sharing)
+
+[debug] [2024-08-26T11:31:46.771Z] Parsed Java major version: 22
+[info] i  emulators: Starting emulators: firestore, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: firestore, hosting"}}
+[debug] [2024-08-26T11:31:46.780Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-08-26T11:31:46.780Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-08-26T11:31:46.780Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-08-26T11:31:46.780Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-08-26T11:31:46.780Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8081}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9151}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project portfolio-template-demo. This may result in unexpected behavior. 
+[debug] [2024-08-26T11:31:46.784Z] [hub] writing locator at C:\Users\shema\AppData\Local\Temp\hub-portfolio-template-demo.json
+[debug] [2024-08-26T11:31:46.790Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-08-26T11:31:46.791Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-08-26T11:31:46.791Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\shema\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.7.jar","--host","127.0.0.1","--port",8081,"--websocket_port",9151,"--project_id","portfolio-template-demo","--rules","C:\\Users\\shema\\Documents\\website\\Portfolio Template\\firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\shema\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.7.jar\",\"--host\",\"127.0.0.1\",\"--port\",8081,\"--websocket_port\",9151,\"--project_id\",\"portfolio-template-demo\",\"--rules\",\"C:\\\\Users\\\\shema\\\\Documents\\\\website\\\\Portfolio Template\\\\firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9151. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9151."}}
+[debug] [2024-08-26T11:31:48.031Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/portfolio-template-demo/sites 
+[debug] [2024-08-26T11:31:49.397Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/portfolio-template-demo/sites 200
+[debug] [2024-08-26T11:31:49.397Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/portfolio-template-demo/sites {"sites":[{"name":"projects/portfolio-template-demo/sites/portfolio-template-demo","defaultUrl":"https://portfolio-template-demo.web.app","appId":"1:341276079607:web:9dcf6bcd10278a43dfaaf2","type":"DEFAULT_SITE"}]}
+[debug] [2024-08-26T11:31:49.397Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/portfolio-template-demo/webApps/1:341276079607:web:9dcf6bcd10278a43dfaaf2/config [none]
+[debug] [2024-08-26T11:31:50.513Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/portfolio-template-demo/webApps/1:341276079607:web:9dcf6bcd10278a43dfaaf2/config 200
+[debug] [2024-08-26T11:31:50.514Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/portfolio-template-demo/webApps/1:341276079607:web:9dcf6bcd10278a43dfaaf2/config {"projectId":"portfolio-template-demo","appId":"1:341276079607:web:9dcf6bcd10278a43dfaaf2","storageBucket":"portfolio-template-demo.appspot.com","apiKey":"AIzaSyDW2o6-U_yfOchrCybxuca3XVPzNWpG0xY","authDomain":"portfolio-template-demo.firebaseapp.com","messagingSenderId":"341276079607","measurementId":"G-3S2QS1PW2C"}
+[debug] [2024-08-26T11:31:50.517Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/portfolio-template-demo [none]
+[debug] [2024-08-26T11:31:50.900Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/portfolio-template-demo 200
+[debug] [2024-08-26T11:31:50.900Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/portfolio-template-demo {"projectId":"portfolio-template-demo","projectNumber":"341276079607","displayName":"Portfolio Template Demo","name":"projects/portfolio-template-demo","resources":{"hostingSite":"portfolio-template-demo"},"state":"ACTIVE","etag":"1_fb65e666-c9b1-4978-bd96-1592cedf3bfa"}
+[debug] [2024-08-26T11:31:50.900Z] Specified "public" directory "out" does not exist; Deploy to Hosting site "portfolio-template-demo" may fail or be empty.
+[info] i  hosting[portfolio-template-demo]: Serving hosting files from: out {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mout\u001b[22m"}}
+[info] +  hosting[portfolio-template-demo]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[debug] [2024-08-26T11:31:50.914Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-08-26T11:31:50.914Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-08-26T11:31:50.914Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\shema\\.cache\\firebase\\emulators\\ui-v1.13.0\\server\\server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\shema\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.13.0\\\\server\\\\server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-08-26T11:31:51.005Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2024-08-26T11:31:51.006Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Firestore │ 127.0.0.1:8081 │ http://127.0.0.1:4000/firestore │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Hosting   │ 127.0.0.1:5000 │ n/a                             │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9151
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

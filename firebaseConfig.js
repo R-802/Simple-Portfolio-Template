@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAnalytics, isSupported } from "firebase/analytics";
+
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 // Firebase configuration using environment variables
@@ -21,28 +21,41 @@ const auth = getAuth(app);
 
 let analytics;
 if (typeof window !== 'undefined') {
-    isSupported().then((supported) => {
-        if (supported) {
-            analytics = getAnalytics(app);
-            console.log("Analytics initialized:", analytics); // Log once confirmed
-        } else {
-            console.warn("Analytics not supported");
-        }
-    }).catch((error) => {
-        console.error("Error checking analytics support:", error);
+    // Only run client-side code
+    import('firebase/analytics').then(({ getAnalytics, isSupported }) => {
+        isSupported().then((supported) => {
+            if (supported) {
+                analytics = getAnalytics(app);
+                console.log("Analytics initialized:", analytics); // Log once confirmed
+            } else {
+                console.warn("Analytics not supported");
+            }
+        }).catch((error) => {
+            console.error("Error checking analytics support:", error);
+        });
     });
 }
 
+if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    // Only run client-side code
+
+    connectFirestoreEmulator(db, 'localhost', 8081);
+}
+
 async function getAuthToken() {
-    const currentUser = auth.currentUser; // Use the initialized auth instance
-    if (!currentUser) {
-        throw new Error("User not authenticated");
-    }
-    try {
-        return await currentUser.getIdToken();
-    } catch (error) {
-        console.error("Error getting auth token:", error);
-        throw new Error("Failed to get auth token");
+    if (typeof window !== 'undefined') {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            throw new Error("User not authenticated");
+        }
+        try {
+            return await currentUser.getIdToken();
+        } catch (error) {
+            console.error("Error getting auth token:", error);
+            throw new Error("Failed to get auth token");
+        }
+    } else {
+        throw new Error("Auth token can only be retrieved client-side");
     }
 }
 
